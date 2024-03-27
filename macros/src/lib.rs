@@ -11,20 +11,9 @@ use quote::quote;
 #[proc_macro_attribute]
 pub fn generator(attr: TokenStream, tokens: TokenStream) -> TokenStream {
 
+	// Parse Input
 	let function = parse_macro_input!(tokens as ItemFn);
 	let boxed = attr.to_string().eq("boxed");
-
-	let generator = function_to_generator(function, boxed);
-	TokenStream::from(quote!(#generator))
-}
-
-
-//---------------------------------------------------------
-//  Function To Generator
-//---------------------------------------------------------
-
-
-fn function_to_generator(function: ItemFn, boxed: bool) -> ItemFn {
 
 	// Get Return Type
 	let ReturnType::Type(arrow, return_type) = &function.sig.output else {
@@ -44,7 +33,8 @@ fn function_to_generator(function: ItemFn, boxed: bool) -> ItemFn {
 	};
 
 	// Return New Function
-	ItemFn { sig, block, ..function }
+	let generator = ItemFn { sig, block, ..function };
+	TokenStream::from(quote!(#generator))
 }
 
 
