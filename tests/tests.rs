@@ -1,4 +1,4 @@
-#![feature(coroutines, coroutine_trait)]
+#![feature(coroutines, coroutine_trait, try_trait_v2)]
 use generators::*;
 
 

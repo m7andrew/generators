@@ -1,5 +1,5 @@
 use proc_macro::TokenStream;
-use syn::{ fold::Fold, Expr, ItemFn, Signature, ReturnType };
+use syn::{ fold::Fold, Expr, Block, ItemFn, Signature, ReturnType };
 use syn::{ fold, parse_macro_input, parse_quote };
 use quote::quote;
 
@@ -38,6 +38,25 @@ pub fn generator(attr: TokenStream, tokens: TokenStream) -> TokenStream {
 }
 
 
+#[proc_macro]
+pub fn yield_try(tokens: TokenStream) -> TokenStream {
+
+	// Parse Input
+	let expr = parse_macro_input!(tokens as Expr);
+
+	// Expand Into Try
+	let block: Block = parse_quote! {{
+		use core::ops::{ Try, FromResidual, ControlFlow::* };
+		match Try::branch(#expr) {
+			Continue(value) => value,
+			Break(residual) => return yield <_ as FromResidual>::from_residual(residual)
+		}
+	}};
+
+	TokenStream::from(quote!(#block))
+}
+
+
 //---------------------------------------------------------
 //  Recursive Transforms
 //---------------------------------------------------------
@@ -63,10 +82,7 @@ impl Fold for Transforms {
 		// Try Expressions
 		Expr::Try(syn::ExprTry { expr, .. }) => {
 			let expr = self.fold_expr(*expr);
-			parse_quote! { match #expr {
-				Ok(value)  => value,
-				Err(error) => return yield Err(error)
-			}}
+			parse_quote! { yield_try!(#expr) }
 		}
 
 		// Other Expressions
