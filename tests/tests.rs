@@ -33,6 +33,21 @@ fn returns() {
 
 
 #[test]
+fn empty_return() {
+
+	#[generator]
+	fn numbers() -> i32 {
+		yield 1;
+		yield 2;
+		return;
+	}
+
+	let result: Vec<i32> = numbers().collect();
+	assert_eq!(result, vec![1, 2]);
+}
+
+
+#[test]
 fn try_expression() {
 
 	fn two() -> Result<i32, i32> {
