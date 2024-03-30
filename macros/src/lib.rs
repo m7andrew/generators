@@ -27,8 +27,8 @@ pub fn generator(attr: TokenStream, tokens: TokenStream) -> TokenStream {
 	// Expand Function Body
 	let block = Transforms.fold_block(*function.block);
 	let block = match boxed {
-		true  => parse_quote!{{ Generator(Box::new(move || #block)) }},
-		false => parse_quote!{{ Generator(move || #block) }}
+		true  => parse_quote!{{ generators::Generator(Box::new(move || #block)) }},
+		false => parse_quote!{{ generators::Generator(move || #block) }}
 	};
 
 	// Return New Function
@@ -63,7 +63,7 @@ pub fn yield_from(tokens: TokenStream) -> TokenStream {
 
 		// Try Expressions
 		Expr::Try(syn::ExprTry { expr, .. }) => {
-			parse_quote! { for x in #expr { yield yield_try!(x) }}
+			parse_quote! { for x in #expr { yield generators::yield_try!(x) }}
 		}
 
 		// Other Expression
@@ -101,7 +101,7 @@ impl Fold for Transforms {
 		// Try Expressions
 		Expr::Try(syn::ExprTry { expr, .. }) => {
 			let expr = self.fold_expr(*expr);
-			parse_quote! { yield_try!(#expr) }
+			parse_quote! { generators::yield_try!(#expr) }
 		}
 
 		// Other Expressions

@@ -1,5 +1,5 @@
 #![feature(coroutines, coroutine_trait, try_trait_v2)]
-use generators::*;
+use generators::{ generator, yield_from };
 
 
 #[test]
