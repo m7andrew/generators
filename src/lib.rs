@@ -7,3 +7,4 @@ mod generator;
 pub use generator::Generator;
 pub use macros::generator;
 pub use macros::yield_try;
+pub use macros::yield_from;

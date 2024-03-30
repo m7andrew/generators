@@ -1,7 +1,8 @@
 use proc_macro::TokenStream;
-use syn::{ fold::Fold, Expr, Block, ItemFn, Signature, ReturnType };
+use syn::{ fold::Fold, Expr, ItemFn, Signature, ReturnType };
 use syn::{ fold, parse_macro_input, parse_quote };
 use quote::quote;
+
 
 //---------------------------------------------------------
 //  Macros
@@ -10,8 +11,6 @@ use quote::quote;
 
 #[proc_macro_attribute]
 pub fn generator(attr: TokenStream, tokens: TokenStream) -> TokenStream {
-
-	// Parse Input
 	let function = parse_macro_input!(tokens as ItemFn);
 	let boxed = attr.to_string().eq("boxed");
 
@@ -33,19 +32,17 @@ pub fn generator(attr: TokenStream, tokens: TokenStream) -> TokenStream {
 	};
 
 	// Return New Function
-	let generator = ItemFn { sig, block, ..function };
-	TokenStream::from(quote!(#generator))
+	let expanded = ItemFn { sig, block, ..function };
+	TokenStream::from(quote!(#expanded))
 }
 
 
 #[proc_macro]
 pub fn yield_try(tokens: TokenStream) -> TokenStream {
-
-	// Parse Input
 	let expr = parse_macro_input!(tokens as Expr);
 
 	// Expand Into Try
-	let block: Block = parse_quote! {{
+	let expanded: syn::Block = parse_quote! {{
 		use core::ops::{ Try, FromResidual, ControlFlow::* };
 		match Try::branch(#expr) {
 			Continue(value) => value,
@@ -53,7 +50,29 @@ pub fn yield_try(tokens: TokenStream) -> TokenStream {
 		}
 	}};
 
-	TokenStream::from(quote!(#block))
+	TokenStream::from(quote!(#expanded))
+}
+
+
+#[proc_macro]
+pub fn yield_from(tokens: TokenStream) -> TokenStream {
+	let expr = parse_macro_input!(tokens as Expr);
+
+	// Expand Into Loop
+	let expanded: syn::ExprForLoop = match expr {
+
+		// Try Expressions
+		Expr::Try(syn::ExprTry { expr, .. }) => {
+			parse_quote! { for x in #expr { yield yield_try!(x) }}
+		}
+
+		// Other Expression
+		expr => {
+			parse_quote! { for x in #expr { yield x }}
+		}
+	};
+
+	TokenStream::from(quote!(#expanded))
 }
 
 
@@ -86,7 +105,7 @@ impl Fold for Transforms {
 		}
 
 		// Other Expressions
-		expression => fold::fold_expr(self, expression)
+		expr => fold::fold_expr(self, expr)
 	}}
 
 }

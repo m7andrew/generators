@@ -57,7 +57,7 @@ fn recursive() {
 	#[generator(boxed)]
 	fn fib(start: i32, acc: i32) -> i32 {
 		yield start + acc;
-		for n in fib(acc, start + acc) { yield n }
+		yield_from!{ fib(acc, start + acc) }
 	}
 
 	let result: Vec<i32> = fib(1, 1).take(3).collect();
