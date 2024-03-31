@@ -1,7 +1,11 @@
 [package]
-name    = "generators"
-version = "0.1.0"
-edition = "2021"
+name        = "generators"
+version     = "0.1.0"
+edition     = "2021"
+license     = "MIT"
+description = "A library to make writing generators straightforward."
+keywords    = ["generators", "coroutines", "yield", "macros", "nightly"]
+authors     = ["Andrew McLemore"]
 
 [dependencies]
 macros = { path = "macros" }
