@@ -78,3 +78,17 @@ fn recursive() {
 	let result: Vec<i32> = fib(1, 1).take(3).collect();
 	assert_eq!(result, vec![2, 3, 5]);
 }
+
+
+#[test]
+fn infinite() {
+
+	#[generator]
+	fn fib() -> i32 {
+		let (mut a, mut b) = (0, 1);
+		loop { yield a; (a, b) = (b, a + b) }
+	}
+
+	let result: Vec<i32> = fib().take(6).collect();
+	assert_eq!(result, vec![0, 1, 1, 2, 3, 5]);
+}
