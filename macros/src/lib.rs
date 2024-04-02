@@ -46,7 +46,7 @@ pub fn yield_try(tokens: TokenStream) -> TokenStream {
 		use core::ops::{ Try, FromResidual, ControlFlow::* };
 		match Try::branch(#expr) {
 			Continue(value) => value,
-			Break(residual) => return yield <_ as FromResidual>::from_residual(residual)
+			Break(error)    => return yield FromResidual::from_residual(error),
 		}
 	}};
 
