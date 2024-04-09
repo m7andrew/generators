@@ -26,7 +26,7 @@ generators = { git = "https://github.com/m7andrew/generators" }
 You will then need to add these feature flags to the top of your `main.rs` or `lib.rs` file:
 
 ```rust
-#![feature(coroutines, coroutine_trait, try_trait_v2)]
+#![feature(coroutines, coroutine_trait, try_trait_v2, lifetime_capture_rules_2024)]
 ```
 
 ## Usage

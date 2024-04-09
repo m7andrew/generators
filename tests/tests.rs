@@ -1,4 +1,4 @@
-#![feature(coroutines, coroutine_trait, try_trait_v2)]
+#![feature(coroutines, coroutine_trait, try_trait_v2, lifetime_capture_rules_2024)]
 use generators::{ generator, yield_from };
 
 
