@@ -41,6 +41,10 @@ You will then need to add these feature flags to the top of your `main.rs` or `l
 
 For examples, please take a look at the [tests](https://github.com/m7andrew/generators/blob/master/tests/tests.rs).
 
+## Future Rust
+
+While Rust generators have been in the works for years, they are far from completion. In the 2024 edition of Rust, [gen blocks](https://github.com/rust-lang/rust/issues/117078) are partially implemented and may be usable... someday. Currently, try expressions [don't work](https://github.com/rust-lang/rust/issues/117486) as laid out in the [RFC](https://github.com/rust-lang/rfcs/blob/master/text/3513-gen-blocks.md) and other design decisions have yet to be hammered out. So until then, this library aims to provide a nice way to use some of Rust's cutting-edge features.
+
 ## Limitations
 
 1) As a macro, error messages will not be as nice as those coming from native language features. Sorry.
