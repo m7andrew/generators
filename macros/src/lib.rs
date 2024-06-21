@@ -25,8 +25,8 @@ pub fn generator(attr: TokenStream, tokens: TokenStream) -> TokenStream {
 	// Expand Function Body
 	let block = Transforms.fold_block(*function.block);
 	let block = match boxed {
-		true  => parse_quote!{{ generators::Generator(Box::new(move || #block)) }},
-		false => parse_quote!{{ generators::Generator(move || #block) }}
+		true  => parse_quote!{{ generators::Generator(Box::new(#[coroutine] move || #block)) }},
+		false => parse_quote!{{ generators::Generator(#[coroutine] move || #block) }}
 	};
 
 	// Return New Function
