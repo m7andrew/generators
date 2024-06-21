@@ -3,6 +3,6 @@
 .DS_Store
 Thumbs.db
 
-# Rust Specific
+# Cargo Files
 /target
 cargo.lock

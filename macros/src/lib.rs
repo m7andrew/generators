@@ -3,11 +3,9 @@ use syn::{ fold::Fold, Expr, ItemFn, Signature, ReturnType };
 use syn::{ fold, parse_macro_input, parse_quote };
 use quote::quote;
 
-
 //---------------------------------------------------------
 //  Macros
 //---------------------------------------------------------
-
 
 #[proc_macro_attribute]
 pub fn generator(attr: TokenStream, tokens: TokenStream) -> TokenStream {
@@ -36,6 +34,7 @@ pub fn generator(attr: TokenStream, tokens: TokenStream) -> TokenStream {
 	TokenStream::from(quote!(#expanded))
 }
 
+// Yield Try Macro ----------------------------------------
 
 #[proc_macro]
 pub fn yield_try(tokens: TokenStream) -> TokenStream {
@@ -53,6 +52,7 @@ pub fn yield_try(tokens: TokenStream) -> TokenStream {
 	TokenStream::from(quote!(#expanded))
 }
 
+// Yield From Macro ---------------------------------------
 
 #[proc_macro]
 pub fn yield_from(tokens: TokenStream) -> TokenStream {
@@ -75,21 +75,21 @@ pub fn yield_from(tokens: TokenStream) -> TokenStream {
 	TokenStream::from(quote!(#expanded))
 }
 
-
 //---------------------------------------------------------
 //  Recursive Transforms
 //---------------------------------------------------------
 
-
 struct Transforms;
 impl Fold for Transforms {
 
-	// Skip Folding Inner Functions
+	// Skip Folding Inner Functions -------------------------
+
 	fn fold_item_fn(&mut self, function: ItemFn) -> ItemFn {
 		function
 	}
 
-	// Fold Expressions
+	// Fold Expressions -------------------------------------
+
 	fn fold_expr(&mut self, expr: Expr) -> Expr { match expr {
 
 		// Return Expressions
@@ -107,5 +107,4 @@ impl Fold for Transforms {
 		// Other Expressions
 		expr => fold::fold_expr(self, expr)
 	}}
-
 }

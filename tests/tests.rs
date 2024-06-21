@@ -1,7 +1,6 @@
 #![feature(coroutines, coroutine_trait, try_trait_v2, lifetime_capture_rules_2024)]
 use generators::{ generator, yield_from };
 
-
 #[test]
 fn basic() {
 
@@ -15,7 +14,6 @@ fn basic() {
 	let result: Vec<i32> = numbers().collect();
 	assert_eq!(result, vec![1, 2, 3]);
 }
-
 
 #[test]
 fn returns() {
@@ -31,7 +29,6 @@ fn returns() {
 	assert_eq!(result, vec![1, 2, 3]);
 }
 
-
 #[test]
 fn empty_return() {
 
@@ -45,7 +42,6 @@ fn empty_return() {
 	let result: Vec<i32> = numbers().collect();
 	assert_eq!(result, vec![1, 2]);
 }
-
 
 #[test]
 fn try_expression() {
@@ -65,7 +61,6 @@ fn try_expression() {
 	assert_eq!(result, vec![Ok(1), Err(2)]);
 }
 
-
 #[test]
 fn recursive() {
 
@@ -78,7 +73,6 @@ fn recursive() {
 	let result: Vec<i32> = fib(1, 1).take(3).collect();
 	assert_eq!(result, vec![2, 3, 5]);
 }
-
 
 #[test]
 fn infinite() {
