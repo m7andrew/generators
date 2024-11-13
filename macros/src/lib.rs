@@ -1,16 +1,19 @@
-use proc_macro::TokenStream;
-use syn::{ fold::Fold, Expr, ItemFn, Signature, ReturnType };
-use syn::{ fold, parse_macro_input, parse_quote };
-use quote::quote;
+#![allow(unused_braces)]
 
-//---------------------------------------------------------
-//  Macros
-//---------------------------------------------------------
+use proc_macro :: { TokenStream };
+use syn        :: { fold::Fold, Expr, ItemFn, Signature, ReturnType };
+use syn        :: { fold, parse_macro_input, parse_quote };
+use quote      :: { quote };
+
+//-----------------------------------------------------------------------------
+//  Generator Macros
+//-----------------------------------------------------------------------------
 
 #[proc_macro_attribute]
 pub fn generator(attr: TokenStream, tokens: TokenStream) -> TokenStream {
+
 	let function = parse_macro_input!(tokens as ItemFn);
-	let boxed = attr.to_string().eq("boxed");
+	let boxed    = attr.to_string().eq("boxed");
 
 	// Get Return Type
 	let ReturnType::Type(arrow, return_type) = &function.sig.output else {
@@ -34,7 +37,7 @@ pub fn generator(attr: TokenStream, tokens: TokenStream) -> TokenStream {
 	TokenStream::from(quote!(#expanded))
 }
 
-// Yield Try Macro ----------------------------------------
+// Yield Try Macro ------------------------------------------------------------
 
 #[proc_macro]
 pub fn yield_try(tokens: TokenStream) -> TokenStream {
@@ -52,7 +55,7 @@ pub fn yield_try(tokens: TokenStream) -> TokenStream {
 	TokenStream::from(quote!(#expanded))
 }
 
-// Yield From Macro ---------------------------------------
+// Yield From Macro -----------------------------------------------------------
 
 #[proc_macro]
 pub fn yield_from(tokens: TokenStream) -> TokenStream {
@@ -75,20 +78,20 @@ pub fn yield_from(tokens: TokenStream) -> TokenStream {
 	TokenStream::from(quote!(#expanded))
 }
 
-//---------------------------------------------------------
+//-----------------------------------------------------------------------------
 //  Recursive Transforms
-//---------------------------------------------------------
+//-----------------------------------------------------------------------------
 
 struct Transforms;
 impl Fold for Transforms {
 
-	// Skip Folding Inner Functions -------------------------
+	// Skip Folding Inner Functions ---------------------------------------------
 
 	fn fold_item_fn(&mut self, function: ItemFn) -> ItemFn {
 		function
 	}
 
-	// Fold Expressions -------------------------------------
+	// Fold Expressions ---------------------------------------------------------
 
 	fn fold_expr(&mut self, expr: Expr) -> Expr { match expr {
 
