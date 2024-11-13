@@ -26,7 +26,7 @@ generators = { git = "https://github.com/m7andrew/generators" }
 You will then need to add these feature flags to the top of your `main.rs` or `lib.rs` file:
 
 ```rust
-#![feature(coroutines, coroutine_trait, try_trait_v2, lifetime_capture_rules_2024)]
+#![feature(coroutines, coroutine_trait, try_trait_v2)]
 ```
 
 ## Usage
@@ -52,4 +52,3 @@ While Rust generators have been in the works for years, they are far from comple
 2) [Implicit returns](https://doc.rust-lang.org/book/ch03-03-how-functions-work.html#functions-with-return-values), or final expression returns will throw a compile error. Besides the semantic ambiguity, there is no way (that I know of) for macros to detect implicit returns. So stick with `yield` and `return` when writing your generators.
 
 3) Async generators are currently not implemented due to the complexity it would add.
-
